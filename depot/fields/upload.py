@@ -43,6 +43,8 @@ class UploadedFile(DepotFileInfo):
         self['content_type'] = saved_file.content_type
         self['uploaded_at'] = saved_file.last_modified.strftime('%Y-%m-%d %H:%M:%S')
         self['_public_url'] = saved_file.public_url
+        self['md5hash'] = saved_file.md5hash
+
 
     def store_content(self, content, filename=None, content_type=None):
         file_id = self.depot.create(content, filename, content_type)

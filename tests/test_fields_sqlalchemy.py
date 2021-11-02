@@ -104,6 +104,7 @@ class TestSQLAAttachments(SQLATestCase):
         d = DBSession.query(Document).filter_by(name=u_('Foo')).first()
         assert d.content.file.read() == self.file_content
         assert d.content.file.filename == os.path.basename(self.fake_file.name)
+        assert d.content.file.md5hash == '89b4f1823325ce4530cc264cc758baa7'
 
     def test_create_polymorphic_from_file(self):
         doc = Confidential(name=u_('Secret'))

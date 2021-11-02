@@ -1,3 +1,5 @@
+import hashlib
+
 from ._compat import percent_encode, unicode_text
 
 try:
@@ -15,3 +17,12 @@ def make_content_disposition(disposition, fname):
     rfc6266_part = "filename*=utf-8''%s" % (percent_encode(fname, safe='!#$&+-.^_`|~', encoding='utf-8'), )
     ascii_part = 'filename="%s"' % (anyascii(fname), )
     return ';'.join((disposition, ascii_part, rfc6266_part))
+
+
+def md5sum(filename, blocksize=65536):
+    hash = hashlib.md5()
+    with open(filename, "rb") as f:
+        for block in iter(lambda: f.read(blocksize), b""):
+            hash.update(block)
+    print(f"HASH for {filename} = {str(hash)}")
+    return hash.hexdigest()

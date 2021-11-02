@@ -28,12 +28,13 @@ class StoredFile(IOBase):
     instead use the storage backend to replace the file content.
     """
     def __init__(self, file_id, filename=None, content_type=None, last_modified=None,
-                 content_length=None):
+                 content_length=None, md5hash=None):
         self.file_id = file_id
         self.filename = filename
         self.content_type = content_type
         self.last_modified = last_modified
         self.content_length = content_length
+        self.md5hash = md5hash
 
     def readable(self):
         """Returns if the stored file is readable or not

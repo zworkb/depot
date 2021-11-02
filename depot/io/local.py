@@ -13,6 +13,7 @@ from datetime import datetime
 from .interfaces import FileStorage, StoredFile
 from . import utils
 from .._compat import unicode_text
+from ..utils import md5sum
 
 
 class LocalStoredFile(StoredFile):
@@ -85,6 +86,7 @@ class LocalFileStorage(FileStorage):
         local_file_path = self.__local_path(file_id)
         os.makedirs(local_file_path)
         saved_file_path = _file_path(local_file_path)
+        md5hash = None
 
         if hasattr(content, 'read'):
             with open(saved_file_path, 'wb') as fileobj:
@@ -97,10 +99,13 @@ class LocalFileStorage(FileStorage):
                 fileobj.write(content)
                 fileobj.flush()
 
+        md5hash = md5sum(saved_file_path)
         metadata = {'filename': filename,
                     'content_type': content_type,
                     'content_length': os.path.getsize(saved_file_path),
-                    'last_modified': utils.timestamp()}
+                    'last_modified': utils.timestamp(),
+                    'md5hash': md5hash
+                    }
 
         with open(_metadata_path(local_file_path), 'w') as metadatafile:
             metadatafile.write(json.dumps(metadata))
